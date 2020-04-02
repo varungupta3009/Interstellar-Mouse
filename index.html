@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+	<head>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<title>Interstellar Mouse</title>
+		<link href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css" rel="stylesheet">
+		<style>
+			html {
+				background: url("Interstellar Mobile") no-repeat center center fixed;
+				-webkit-background-size: contain;
+				-moz-background-size: contain;
+				-o-background-size: contain;
+				background-size: contain;
+				background-color: #000;
+			}
+
+			@media screen and (min-width: 768px) {
+				html {
+					background: url("Interstellar") no-repeat center center fixed;
+					-webkit-background-size: cover;
+					-moz-background-size: cover;
+					-o-background-size: cover;
+					background-size: cover;
+					background-color: #000;
+				}
+			}
+		</style>
+	</head>
+
+	<body>
+		<!-- Alert to capture at-least one user event on the DOM to enable audio playback in the background. -->
+		<div class="alert bg-gray-900 text-center py-4 lg:px-4 fixed inset-x-0 bottom-0"
+			onclick="this.style.display = 'none'">
+			<div class="p-2 bg-gray-800 items-center text-gray-100 leading-none lg:rounded-full flex lg:inline-flex"
+				role="alert">
+				<span class="flex rounded-full bg-gray-500 uppercase px-2 py-1 text-xs font-bold mr-3">Tip</span>
+				<span class="font-semibold mr-2 text-left flex-auto">Click/Touch here to get started.</span>
+				<svg class="fill-current opacity-75 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+					<path d="M12.95 10.707l.707-.707L8 4.343 6.586 5.757 10.828 10l-4.242 4.243L8 15.657l4.95-4.95z" />
+				</svg>
+			</div>
+		</div>
+		<!-- <audio preload>
+			<source src="No Time for Caution - Hans Zimmer" type="audio/mpeg" />
+		</audio> -->
+		<a href="https://github.com/varungupta3009" target="_blank">
+			<svg class="text-white fill-current w-10 h-10 m-3 fixed right-0 bottom-0" xmlns="http://www.w3.org/2000/svg"
+				viewBox="0 0 20 20">
+				<title>GitHub</title>
+				<path
+					d="M10 0a10 10 0 0 0-3.16 19.49c.5.1.68-.22.68-.48l-.01-1.7c-2.78.6-3.37-1.34-3.37-1.34-.46-1.16-1.11-1.47-1.11-1.47-.9-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.9 1.52 2.34 1.08 2.91.83.1-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.94 0-1.1.39-1.99 1.03-2.69a3.6 3.6 0 0 1 .1-2.64s.84-.27 2.75 1.02a9.58 9.58 0 0 1 5 0c1.91-1.3 2.75-1.02 2.75-1.02.55 1.37.2 2.4.1 2.64.64.7 1.03 1.6 1.03 2.69 0 3.84-2.34 4.68-4.57 4.93.36.31.68.92.68 1.85l-.01 2.75c0 .26.18.58.69.48A10 10 0 0 0 10 0">
+				</path>
+			</svg>
+		</a>
+	</body>
+
+	<script>
+		// Pre - loading Hans Zimmer's No Time for Caution (from Interstellar [The Official Sountrack])
+		music = new Audio("No Time for Caution - Hans Zimmer")
+		music.currentTime = 150
+		resetTrack = () => {
+			music.pause()
+			music.currentTime = 150
+		}
+		myTime = null
+		scrollUp = true
+		window.onwheel = (event) => {
+			/* Rough work-around to ignore touchpad/touch input */
+			if (Math.abs(event.deltaY) < 100) return
+
+			/*
+			Resets the track if the wheel direction is reversed.
+			This makes sure than only smooth-scrolling mouse-wheels can play the track continuously,
+			in a single direction one-time smooth scroll motion.
+			*/
+			if ((event.deltaY > 0 && scrollUp) || (event.deltaY < 0 && !scrollUp)) {
+				resetTrack()
+				scrollUp = event.deltaY < 0 ? true : false
+				return
+			}
+			scrollUp = event.deltaY < 0 ? true : false
+
+			/* Uses timeouts to ensure that the track pauses and resets after the last wheel event */
+			clearTimeout(myTime)
+			music.play()
+			myTime = setTimeout(resetTrack, 200)
+		}
+	</script>
+
+</html>
